@@ -23,6 +23,7 @@ function M.list()
                 not builtin[id(k)]
                 and not k.lhs:match("^<Plug>")
                 and not (k.rhs or ""):match("^<Plug>")
+                and k.desc ~= "which_key_ignore" -- keys plugins like hardtime only watch
                 and not seen[k.mode .. k.lhs]
             then
                 seen[k.mode .. k.lhs] = true

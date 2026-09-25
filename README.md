@@ -2,6 +2,8 @@
 
 Configs for Arch Linux and macOS, linked into place with [GNU Stow](https://www.gnu.org/software/stow/).
 
+All the keys (Neovim, tmux, zsh, kitty) are in [KEYS.md](KEYS.md).
+
 | package | links to |
 | ------- | -------- |
 | `zsh`   | `~/.zshrc` |

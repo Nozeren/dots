@@ -61,7 +61,7 @@ zsh-plugins-update() {
     done
 }
 
-# zsh-vi-mode: Esc for normal mode (w, b, ciw, dd, ...), v opens the command in Neovim.
+# zsh-vi-mode: Esc for normal mode (w, b, ciw, dd, ...), vv opens the command in Neovim.
 # It resets key bindings when it starts, so other bindings go in zvm_after_init.
 source "$ZSH_PLUGINS/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
 zvm_after_init() {
