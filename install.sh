@@ -30,8 +30,11 @@ backup="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
 for pkg in "${PACKAGES[@]}"; do
     [ -d "$DOTFILES/$pkg" ] || { echo "No package named $pkg" >&2; exit 1; }
 
-    # Move aside real files (not our symlinks) that the package would replace
-    (cd "$DOTFILES/$pkg" && find . -type f) | while read -r f; do
+    # Move aside real files (not our symlinks) that the package would replace,
+    # plus old locations that would shadow the new ones (tmux reads ~/.tmux.conf first)
+    legacy=""
+    [ "$pkg" = tmux ] && legacy="./.tmux.conf"
+    { (cd "$DOTFILES/$pkg" && find . -type f); [ -n "$legacy" ] && echo "$legacy"; } | while read -r f; do
         target="$HOME/${f#./}"
         if [ -e "$target" ] && [ ! -L "$target" ]; then
             mkdir -p "$backup/$(dirname "${f#./}")"
