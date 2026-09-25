@@ -21,6 +21,7 @@ opt.termguicolors = true
 opt.showmode = false
 opt.list = true
 opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+opt.foldlevelstart = 99  -- open files with all folds open
 opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
 
 -- Search

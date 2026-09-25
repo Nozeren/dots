@@ -11,6 +11,7 @@ cask "kitty"
 
 # editor and the search tools it uses
 brew "neovim"
+brew "tree-sitter-cli"
 brew "ripgrep"
 brew "fd"
 brew "fzf"

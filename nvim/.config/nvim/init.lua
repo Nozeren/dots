@@ -20,6 +20,7 @@ require("plugins.colorscheme")
 require("plugins.oil")
 require("plugins.fzf")
 require("plugins.harpoon")
+require("plugins.treesitter")
 
 -- Status bar (after the colourscheme, it takes its colours from it)
 require("config.statusline")

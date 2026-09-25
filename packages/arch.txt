@@ -13,6 +13,7 @@ kitty
 
 # editor and the search tools it uses
 neovim
+tree-sitter-cli  # builds treesitter parsers
 ripgrep
 fd
 fzf
