@@ -14,6 +14,9 @@ require("config.pack")
 
 -- Plugins, one file each
 require("plugins.colorscheme")
+require("plugins.oil")
+require("plugins.fzf")
+require("plugins.harpoon")
 
 -- Settings for this machine only (e.g. work plugins); lua/local.lua is not committed
 if vim.uv.fs_stat(vim.fn.stdpath("config") .. "/lua/local.lua") then
