@@ -17,6 +17,7 @@ tree-sitter-cli  # builds treesitter parsers
 ripgrep
 fd
 fzf
+fnm           # Node versions per project (.nvmrc)
 wl-clipboard  # system clipboard for Neovim on Wayland
 
 # fonts
