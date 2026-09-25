@@ -11,11 +11,11 @@ fzf.setup({
         fullscreen = true,
         preview = {
             layout = "vertical",
-            vertical = "up:60%",    -- preview on top, results below
+            vertical = "up:60%", -- preview on top, results below
         },
     },
     defaults = {
-        formatter = "path.filename_first",  -- "init.lua  nvim/.config/nvim"
+        formatter = "path.filename_first", -- "init.lua  nvim/.config/nvim"
     },
 })
 

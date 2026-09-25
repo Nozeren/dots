@@ -11,14 +11,12 @@ function _G.oil_winbar()
 end
 
 require("oil").setup({
-    default_file_explorer = true,   -- also used for `nvim .` and :e some/dir
+    default_file_explorer = true, -- also used for `nvim .` and :e some/dir
     delete_to_trash = true,
     view_options = {
         show_hidden = true,
-        natural_order = true,       -- file2 before file10
-        is_always_hidden = function(name)
-            return name == ".." or name == ".git"
-        end,
+        natural_order = true, -- file2 before file10
+        is_always_hidden = function(name) return name == ".." or name == ".git" end,
     },
     win_options = {
         wrap = true,

@@ -13,12 +13,13 @@ vim.pack.add({
 
 -- ---------------------------------------------------------------- servers
 
--- Python: basedpyright for types/navigation, ruff for linting (and formatting)
+-- Python: basedpyright for types/navigation, ruff for linting (and formatting),
+-- pytest_language_server for jumping to fixtures
 vim.lsp.config("basedpyright", {
     settings = {
         basedpyright = {
             analysis = {
-                typeCheckingMode = "standard",      -- the default "recommended" is very strict
+                typeCheckingMode = "standard", -- the default "recommended" is very strict
                 diagnosticMode = "openFilesOnly",
             },
         },
@@ -28,7 +29,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
     desc = "Let basedpyright handle hover docs, not ruff",
     callback = function(args)
         local client = vim.lsp.get_client_by_id(args.data.client_id)
-        if client and client.name == "ruff" then client.server_capabilities.hoverProvider = false end
+        if client and client.name == "ruff" then
+            client.server_capabilities.hoverProvider = false
+        end
     end,
 })
 
@@ -59,9 +62,14 @@ require("mason").setup()
 require("mason-lspconfig").setup({
     -- Installed on first start, then enabled automatically
     ensure_installed = {
-        "basedpyright", "ruff",
+        "basedpyright",
+        "ruff",
+        "pytest_language_server",
         "lua_ls",
-        "html", "djlsp", "cssls", "vtsls",
+        "html",
+        "djlsp",
+        "cssls",
+        "vtsls",
         "cucumber_language_server",
     },
 })
@@ -74,7 +82,7 @@ vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show line 
 -- ---------------------------------------------------------------- diagnostics
 
 vim.diagnostic.config({
-    virtual_text = false,           -- tiny-inline-diagnostic shows the message instead
+    virtual_text = false, -- tiny-inline-diagnostic shows the message instead
     severity_sort = true,
     signs = {
         text = {

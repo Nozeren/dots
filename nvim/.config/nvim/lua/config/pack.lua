@@ -12,9 +12,7 @@ end, {
     desc = "Update all plugins, or the ones named",
 })
 
-vim.api.nvim_create_user_command("PackDel", function(opts)
-    vim.pack.del(opts.fargs)
-end, {
+vim.api.nvim_create_user_command("PackDel", function(opts) vim.pack.del(opts.fargs) end, {
     nargs = "+",
     complete = function()
         -- Only plugins no longer added in the config can be deleted

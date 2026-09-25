@@ -30,7 +30,9 @@ local modes = {
 local function fg(...)
     for _, name in ipairs({ ... }) do
         local hl = vim.api.nvim_get_hl(0, { name = name, link = false })
-        if hl.fg then return hl.fg end
+        if hl.fg then
+            return hl.fg
+        end
     end
 end
 
@@ -66,7 +68,9 @@ local branches = {}
 
 local function refresh_branch()
     local dir = vim.fn.expand("%:p:h")
-    if dir == "" or vim.bo.buftype ~= "" then return end
+    if dir == "" or vim.bo.buftype ~= "" then
+        return
+    end
     vim.system({ "git", "-C", dir, "branch", "--show-current" }, { text = true }, function(out)
         branches[dir] = out.code == 0 and vim.trim(out.stdout) or ""
         vim.schedule(function() vim.cmd.redrawstatus() end)
@@ -84,15 +88,23 @@ end
 
 local function file()
     local name = vim.fn.expand("%:t")
-    if name == "" then return hl("Dim", " [No Name]") end
+    if name == "" then
+        return hl("Dim", " [No Name]")
+    end
 
     local out = hl("File", " " .. name)
-    if vim.bo.modified then out = out .. hl("Modified", " ●") end
-    if vim.bo.readonly or not vim.bo.modifiable then out = out .. hl("Dim", " ") end
+    if vim.bo.modified then
+        out = out .. hl("Modified", " ●")
+    end
+    if vim.bo.readonly or not vim.bo.modifiable then
+        out = out .. hl("Dim", " ")
+    end
 
     -- Parent folder, relative to where nvim was started
     local folder = vim.fn.fnamemodify(vim.fn.expand("%:h"), ":~:.")
-    if folder ~= "." and folder ~= "" then out = out .. hl("Dim", "  " .. folder) end
+    if folder ~= "." and folder ~= "" then
+        out = out .. hl("Dim", "  " .. folder)
+    end
     return out
 end
 
@@ -100,8 +112,15 @@ local function diagnostics()
     local counts = vim.diagnostic.count(0)
     local s = vim.diagnostic.severity
     local parts = {}
-    for _, d in ipairs({ { s.ERROR, "Error", "E" }, { s.WARN, "Warn", "W" }, { s.INFO, "Info", "I" }, { s.HINT, "Hint", "H" } }) do
-        if (counts[d[1]] or 0) > 0 then table.insert(parts, hl(d[2], d[3] .. counts[d[1]])) end
+    for _, d in ipairs({
+        { s.ERROR, "Error", "E" },
+        { s.WARN, "Warn", "W" },
+        { s.INFO, "Info", "I" },
+        { s.HINT, "Hint", "H" },
+    }) do
+        if (counts[d[1]] or 0) > 0 then
+            table.insert(parts, hl(d[2], d[3] .. counts[d[1]]))
+        end
     end
     return #parts > 0 and table.concat(parts, " ") .. "  " or ""
 end
@@ -116,15 +135,13 @@ local function git()
     return (branch and branch ~= "") and hl("Git", " " .. branch .. "  ") or ""
 end
 
-local function position()
-    return hl("Position", " %l:%c  %p%% ")
-end
+local function position() return hl("Position", " %l:%c  %p%% ") end
 
 function M.render()
     return table.concat({
         mode(),
         file(),
-        "%#StDim#%=",   -- everything after this is right-aligned
+        "%#StDim#%=", -- everything after this is right-aligned
         diagnostics(),
         lsp(),
         git(),
