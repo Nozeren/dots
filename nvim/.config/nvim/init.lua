@@ -21,6 +21,8 @@ require("plugins.oil")
 require("plugins.fzf")
 require("plugins.harpoon")
 require("plugins.treesitter")
+require("plugins.lsp")
+require("plugins.completion")
 
 -- Status bar (after the colourscheme, it takes its colours from it)
 require("config.statusline")
