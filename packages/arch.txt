@@ -15,6 +15,7 @@ neovim
 ripgrep
 fd
 fzf
+wl-clipboard  # system clipboard for Neovim on Wayland
 
 # fonts
 ttf-iosevka-nerd
