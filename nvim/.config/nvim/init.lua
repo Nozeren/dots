@@ -24,6 +24,7 @@ require("plugins.treesitter")
 require("plugins.lsp")
 require("plugins.completion")
 require("plugins.formatting")
+require("plugins.gitsigns")
 require("plugins.dev")
 
 -- Status bar (after the colourscheme, it takes its colours from it)

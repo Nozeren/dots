@@ -3,7 +3,7 @@ local opt = vim.opt
 -- Line numbers
 opt.number = true
 opt.relativenumber = true
-opt.signcolumn = "yes"
+opt.signcolumn = "yes:2" -- room for a git bar and a diagnostic sign
 opt.colorcolumn = "120"
 
 -- Indentation: 4 spaces
