@@ -11,15 +11,21 @@ Configs for Arch Linux and macOS, linked into place with [GNU Stow](https://www.
 
 ## Install
 
+On a new machine (Arch Linux or macOS):
+
 ```sh
 git clone git@github.com:Nozeren/dots.git ~/dotfiles
-cd ~/dotfiles
-./install.sh            # all packages
-./install.sh tmux nvim  # just some
+~/dotfiles/install.sh
 ```
 
-`install.sh` installs Stow if it's missing (pacman or Homebrew), moves any
-existing files it would replace into `~/.dotfiles-backup/<timestamp>/`, and
-symlinks each package into `$HOME`.
+That installs the packages, links the configs and makes zsh the default shell.
+It's safe to re-run whenever something is added.
+
+| command | what it does |
+| ------- | ------------ |
+| `./install.sh` | everything below |
+| `./install.sh packages` | install packages: `packages/arch.txt` with pacman, or `packages/Brewfile` with Homebrew (installed if missing) |
+| `./install.sh link [pkg...]` | symlink configs into `$HOME` with Stow; existing files are moved to `~/.dotfiles-backup/<timestamp>/` |
 
 Edit files in `~/dotfiles`; the symlinks mean changes apply immediately.
+When a config starts using a new tool, add it to both package lists.

@@ -1,0 +1,21 @@
+# Packages for Arch Linux, installed with pacman by install.sh
+# One per line; anything after # is ignored.
+
+# dotfiles tooling
+git
+stow
+
+# shell and terminal
+zsh
+tmux
+kitty
+
+# editor and the search tools it uses
+neovim
+ripgrep
+fd
+fzf
+
+# fonts
+ttf-iosevka-nerd
+ttf-jetbrains-mono-nerd

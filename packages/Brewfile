@@ -1,0 +1,19 @@
+# Packages for macOS, installed with `brew bundle` by install.sh
+# zsh and git ship with macOS.
+
+# dotfiles tooling
+brew "stow"
+
+# shell and terminal
+brew "tmux"
+cask "kitty"
+
+# editor and the search tools it uses
+brew "neovim"
+brew "ripgrep"
+brew "fd"
+brew "fzf"
+
+# fonts
+cask "font-iosevka-nerd-font"
+cask "font-jetbrains-mono-nerd-font"
