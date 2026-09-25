@@ -1,0 +1,4 @@
+# Packages from the AUR (Arch only), installed with yay by install.sh
+# One per line; anything after # is ignored.
+
+zen-browser-bin

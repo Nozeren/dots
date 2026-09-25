@@ -1,0 +1,167 @@
+@import "matugen/colors.css";
+@define-color sun #ef4419;
+* {
+    /* `otf-font-awesome` is required to be installed for icons */
+    font-family: IosevkaNerdFont-Regular;
+    font-size: 12px;
+}
+
+window#waybar {
+    background-color: rgba(17, 14, 12, 0.0);
+    transition-property: background-color;
+    transition-duration: .5s;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+/*
+window#waybar.empty {
+    background-color: transparent;
+}
+window#waybar.solo {
+    background-color: #FFFFFF;
+}
+*/
+
+button {
+    /* Use box-shadow instead of border so the text isn't offset */
+    box-shadow: inset 0 -3px transparent;
+    /* Avoid rounded borders under each button name */
+    border: none;
+    border-radius: 0;
+}
+
+/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
+button:hover {
+    box-shadow: inset 0 -3px #4d3a33;
+}
+
+/* you can set a style on hover for any module like this */
+#pulseaudio:hover {
+    color: @on_secondary;
+}
+
+/* WORKSPACES */
+
+
+#workspaces button {
+    padding: 0 8px;
+    color: @inverse_surface;
+}
+
+#workspaces button label{
+    font-size:13px
+}
+
+#workspaces button.active {
+    color: @error;
+    font-weight: bold;
+}
+#workspaces button.active label{
+    font-size:16px
+}
+
+#workspaces button:hover {
+    box-shadow: inherit;
+    text-shadow: inherit;
+    background: none;
+    color: @on_secondary;
+}
+
+#workspaces button.urgent{
+    color: @sun;
+    font-weight: bold;
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#wireplumber,
+#custom-media,
+#tray,
+#idle_inhibitor,
+#scratchpad,
+#custom-power,
+#custom-expand,
+#custom-notification,
+#mpd {
+    padding: 0 5px;
+    color: @inverse_surface;
+}
+
+#window,
+#workspaces {
+    margin: 0 4px;
+}
+
+/* If workspaces is the leftmost module, omit left margin */
+.modules-left > widget:first-child > #workspaces {
+    margin-left: 0;
+}
+
+/* If workspaces is the rightmost module, omit right margin */
+.modules-right > widget:last-child > #workspaces {
+    margin-right: 0;
+}
+
+
+
+@keyframes blink {
+    to {
+        color: @sun;
+    }
+}
+
+/* Using steps() instead of linear as a timing function to limit cpu usage */
+#battery.critical:not(.charging) {
+    color: @error;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    font-weight: bold;
+    font-size: 14px;
+}
+#battery.warning:not(.charging) {
+    color: @error;
+    font-weight: bold;
+}
+
+
+#network.disconnected {
+    color: @error;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#pulseaudio {
+}
+
+#pulseaudio.muted {
+    color: @error;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#temperature.critical {
+    color: @sun;
+}
+#clock {
+    font-size: 14px;
+}
+

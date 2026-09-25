@@ -10,6 +10,10 @@ All the keys (Neovim, tmux, zsh, kitty) are in [KEYS.md](KEYS.md).
 | `tmux`  | `~/.config/tmux/tmux.conf` |
 | `nvim`  | `~/.config/nvim/` |
 | `kitty` | `~/.config/kitty/` |
+| `wallpapers` | `~/.local/share/wallpapers/` (Everforest walls: streetlights on Arch, a street shop on macOS) |
+| `hypr` | `~/.config/hypr/` (Arch only: Hyprland, hyprpaper, power menu and screenshot scripts) |
+| `waybar` | `~/.config/waybar/` (Arch only) |
+| `matugen` | `~/.config/matugen/` (Arch only: generates the Hyprland/waybar colours from the wallpaper) |
 
 ## Install
 
@@ -26,7 +30,7 @@ It's safe to re-run whenever something is added.
 | command | what it does |
 | ------- | ------------ |
 | `./install.sh` | everything below; before linking it lists the files it would replace and asks |
-| `./install.sh packages` | install packages: `packages/arch.txt` with pacman, or `packages/Brewfile` with Homebrew (installed if missing) |
+| `./install.sh packages` | install packages: `packages/arch.txt` with pacman (plus `packages/aur.txt` with yay), or `packages/Brewfile` with Homebrew (installed if missing) |
 | `./install.sh link [pkg...]` | symlink configs into `$HOME` with Stow, no prompt; existing files are moved to `~/.dotfiles-backup/<timestamp>/` (for nvim: the whole old `~/.config/nvim` and `~/.local/share/nvim`) |
 | `./install.sh nvim` | install Neovim plugins, language servers, formatters and treesitter parsers without opening Neovim (list in `nvim/.config/nvim/lua/config/tools.lua`) |
 | `./install.sh update` | bring a machine up to date: pull this repo, update packages, re-link the configs that are linked, update Neovim plugins/language servers/formatters/parsers, zsh and tmux plugins. Commit `nvim-pack-lock.json` afterwards if it changed |

@@ -12,7 +12,6 @@
 set -euo pipefail
 
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIGS=(zsh tmux nvim kitty)
 
 info() { printf '\033[1;32m==>\033[0m %s\n' "$*"; }
 fail() { printf '\033[1;31merror:\033[0m %s\n' "$*" >&2; exit 1; }
@@ -22,6 +21,9 @@ case "$(uname -s)" in
     Linux)  [ -f /etc/arch-release ] && OS=arch || OS=linux ;;
     *)      OS=unknown ;;
 esac
+
+CONFIGS=(zsh tmux nvim kitty wallpapers)
+[ "$OS" = arch ] && CONFIGS+=(hypr waybar matugen)     # the Hyprland desktop, Arch only
 
 # ---------------------------------------------------------------- packages
 
@@ -35,6 +37,31 @@ ensure_brew() {
     done
 }
 
+# Packages from a list file that aren't installed (or provided by something installed)
+missing_packages() {
+    sed 's/#.*//' "$1" | xargs -n1 | while read -r pkg; do
+        pacman -Q "$pkg" >/dev/null 2>&1 || echo "$pkg"
+    done
+}
+
+install_aur() {
+    local list="$DOTFILES/packages/aur.txt" missing
+    [ -f "$list" ] || return 0
+    missing="$(missing_packages "$list")"
+    [ -n "$missing" ] || return 0
+    if ! command -v yay >/dev/null && ! command -v paru >/dev/null; then
+        info "Installing yay (AUR helper)"
+        sudo pacman -S --needed --noconfirm base-devel git
+        local tmp; tmp="$(mktemp -d)"
+        git clone --quiet https://aur.archlinux.org/yay-bin.git "$tmp/yay-bin"
+        (cd "$tmp/yay-bin" && makepkg -si --noconfirm)
+        rm -rf "$tmp"
+    fi
+    info "Installing AUR packages (packages/aur.txt)"
+    # shellcheck disable=SC2086
+    "$(command -v yay || command -v paru)" -S --needed --noconfirm $missing
+}
+
 install_packages() {
     case "$OS" in
         arch)
@@ -42,8 +69,12 @@ install_packages() {
             info "Updating the Arch keyring"
             sudo pacman -Sy --needed --noconfirm archlinux-keyring
             info "Installing packages with pacman (packages/arch.txt)"
-            # -Syu rather than -S: Arch doesn't support partial upgrades
-            sed 's/#.*//' "$DOTFILES/packages/arch.txt" | xargs sudo pacman -Syu --needed --noconfirm
+            # -Syu rather than -S: Arch doesn't support partial upgrades. Packages something
+            # else already provides are left out (e.g. matugen-bin from the AUR provides matugen;
+            # asking for matugen would be a conflict, which --noconfirm turns into an abort)
+            # shellcheck disable=SC2046
+            sudo pacman -Syu --needed --noconfirm $(missing_packages "$DOTFILES/packages/arch.txt" pacman)
+            install_aur
             ;;
         macos)
             ensure_brew
@@ -100,6 +131,21 @@ link_configs() {
     done
 
     if [ -d "$backup" ]; then info "Old files saved in $backup"; fi
+    apply_wallpaper
+}
+
+# Arch: generate the Hyprland/waybar colours from the wallpaper (the files aren't in git).
+# macOS: set the desktop picture.
+apply_wallpaper() {
+    local dir="$HOME/.local/share/wallpapers"
+    if [ "$OS" = arch ] && [ -f "$dir/streetlights.png" ] && [ -f "$HOME/.config/matugen/config.toml" ] \
+        && command -v matugen >/dev/null; then
+        info "Generating desktop colours from the wallpaper (matugen)"
+        matugen image "$dir/streetlights.png" >/dev/null 2>&1 || echo "    matugen failed; run: matugen image $dir/streetlights.png"
+    elif [ "$OS" = macos ] && [ -f "$dir/japanese-street-shop.png" ]; then
+        info "Setting the desktop picture"
+        osascript -e "tell application \"System Events\" to tell every desktop to set picture to \"$dir/japanese-street-shop.png\""
+    fi
 }
 
 # Show what linking would replace and ask; defaults to no
@@ -143,6 +189,10 @@ linked_configs() {
             tmux)  marker=".config/tmux/tmux.conf" ;;
             nvim)  marker=".config/nvim/init.lua" ;;
             kitty) marker=".config/kitty/kitty.conf" ;;
+            hypr)  marker=".config/hypr/hyprland.conf" ;;
+            waybar) marker=".config/waybar/config.jsonc" ;;
+            matugen) marker=".config/matugen/config.toml" ;;
+            wallpapers) marker=".local/share/wallpapers/streetlights.png" ;;
         esac
         [ "$(realpath "$HOME/$marker" 2>/dev/null)" = "$DOTFILES/$pkg/$marker" ] && echo "$pkg"
     done

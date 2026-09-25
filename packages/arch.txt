@@ -23,3 +23,19 @@ wl-clipboard  # system clipboard for Neovim on Wayland
 # fonts
 ttf-iosevka-nerd
 ttf-jetbrains-mono-nerd
+
+# desktop (Hyprland)
+hyprland
+hyprpaper
+waybar
+swaync          # notifications
+wofi            # app launcher, power menu
+matugen         # desktop colours from the wallpaper
+grim            # screenshots:
+slurp           #   select an area
+swappy          #   annotate
+libnotify       # notify-send
+pavucontrol     # sound settings (waybar click)
+blueman         # bluetooth settings (waybar right-click)
+networkmanager  # nmtui (waybar right-click)
+dolphin         # file manager
