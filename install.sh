@@ -5,6 +5,7 @@
 #   ./install.sh packages        only install packages
 #   ./install.sh link [pkg...]   only link configs: the ones named, or all of them (asks first)
 #   ./install.sh nvim            only install Neovim plugins, language servers and parsers
+#   ./install.sh update          pull the repo, update packages, re-link, update all plugins
 #
 # Safe to re-run: installed packages are skipped and links are refreshed. Files a link
 # would replace are moved to ~/.dotfiles-backup/<timestamp>/ first.
@@ -131,6 +132,64 @@ setup_nvim() {
     XDG_CONFIG_HOME="$DOTFILES/nvim/.config" nvim --headless -c "lua require('config.bootstrap')"
 }
 
+# ---------------------------------------------------------------- update
+
+# Configs that are already linked (so re-linking picks up new files, and nothing else is touched)
+linked_configs() {
+    local pkg marker
+    for pkg in "${CONFIGS[@]}"; do
+        case "$pkg" in
+            zsh)   marker=".zshrc" ;;
+            tmux)  marker=".config/tmux/tmux.conf" ;;
+            nvim)  marker=".config/nvim/init.lua" ;;
+            kitty) marker=".config/kitty/kitty.conf" ;;
+        esac
+        [ "$(realpath "$HOME/$marker" 2>/dev/null)" = "$DOTFILES/$pkg/$marker" ] && echo "$pkg"
+    done
+}
+
+update_all() {
+    if [ "${1:-}" != "--pulled" ]; then
+        info "Pulling the latest dotfiles"
+        local before; before="$(sha1sum "$0" 2>/dev/null || shasum "$0")"
+        git -C "$DOTFILES" pull --ff-only || fail "git pull failed; sort out the repo and run again"
+        # If this script itself changed, continue with the new version
+        if [ "$before" != "$(sha1sum "$0" 2>/dev/null || shasum "$0")" ]; then
+            exec "$DOTFILES/install.sh" update --pulled
+        fi
+    fi
+
+    install_packages
+
+    local linked; linked="$(linked_configs | tr '\n' ' ')"
+    if [ -n "${linked// /}" ]; then
+        # shellcheck disable=SC2086
+        link_configs $linked
+    fi
+
+    if command -v nvim >/dev/null; then
+        info "Updating Neovim plugins, language servers, formatters and parsers"
+        XDG_CONFIG_HOME="$DOTFILES/nvim/.config" nvim --headless -c "lua require('config.update')"
+    fi
+
+    local dir
+    if [ -d "$HOME/.local/share/zsh/plugins" ]; then
+        info "Updating zsh plugins"
+        for dir in "$HOME"/.local/share/zsh/plugins/*/; do
+            echo "    $(basename "$dir")"; git -C "$dir" pull --quiet --ff-only
+        done
+    fi
+    if [ -x "$HOME/.local/share/tmux/plugins/tpm/bin/update_plugins" ]; then
+        info "Updating tmux plugins"
+        "$HOME/.local/share/tmux/plugins/tpm/bin/update_plugins" all | sed 's/^/    /'
+    fi
+
+    if ! git -C "$DOTFILES" diff --quiet -- nvim/.config/nvim/nvim-pack-lock.json; then
+        info "Neovim plugins changed: commit nvim/.config/nvim/nvim-pack-lock.json so other machines match"
+    fi
+    info "Up to date. Restart Neovim and open a new shell to use the updates."
+}
+
 # ---------------------------------------------------------------- shell
 
 set_default_shell() {
@@ -170,6 +229,7 @@ case "$cmd" in
         fi
         ;;
     nvim)     setup_nvim ;;
-    -h|--help|help) sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//' ;;
+    update)   update_all "$@" ;;
+    -h|--help|help) sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//' ;;
     *)        fail "Unknown command: $cmd (try ./install.sh help)" ;;
 esac
