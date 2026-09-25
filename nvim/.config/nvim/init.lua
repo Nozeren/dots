@@ -21,6 +21,9 @@ require("plugins.oil")
 require("plugins.fzf")
 require("plugins.harpoon")
 
+-- Status bar (after the colourscheme, it takes its colours from it)
+require("config.statusline")
+
 -- Settings for this machine only (e.g. work plugins); lua/local.lua is not committed
 if vim.uv.fs_stat(vim.fn.stdpath("config") .. "/lua/local.lua") then
     require("local")
