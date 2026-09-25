@@ -10,11 +10,19 @@ map("n", "<C-u>", "<C-u>zz", { desc = "Half-page up, centred" })
 map("n", "n", "nzzzv", { desc = "Next search result, centred" })
 map("n", "N", "Nzzzv", { desc = "Previous search result, centred" })
 
--- Move between splits with Ctrl + h/j/k/l
-map("n", "<C-h>", "<C-w>h", { desc = "Move to left split" })
-map("n", "<C-j>", "<C-w>j", { desc = "Move to lower split" })
-map("n", "<C-k>", "<C-w>k", { desc = "Move to upper split" })
-map("n", "<C-l>", "<C-w>l", { desc = "Move to right split" })
+-- Move between splits with Ctrl + h/j/k/l; at the edge of Neovim, carry on into the
+-- neighbouring tmux pane (tmux sends these keys to Neovim, see tmux.conf)
+local function navigate(dir)
+    local win = vim.fn.winnr()
+    vim.cmd.wincmd(dir)
+    if vim.fn.winnr() == win and vim.env.TMUX then
+        vim.system({ "tmux", "select-pane", "-" .. ({ h = "L", j = "D", k = "U", l = "R" })[dir] })
+    end
+end
+map("n", "<C-h>", function() navigate("h") end, { desc = "Move to left split / tmux pane" })
+map("n", "<C-j>", function() navigate("j") end, { desc = "Move to lower split / tmux pane" })
+map("n", "<C-k>", function() navigate("k") end, { desc = "Move to upper split / tmux pane" })
+map("n", "<C-l>", function() navigate("l") end, { desc = "Move to right split / tmux pane" })
 
 -- Clear search highlight
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
