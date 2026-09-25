@@ -34,7 +34,7 @@ for pkg in "${PACKAGES[@]}"; do
     # plus old locations that would shadow the new ones (tmux reads ~/.tmux.conf first)
     legacy=""
     [ "$pkg" = tmux ] && legacy="./.tmux.conf"
-    { (cd "$DOTFILES/$pkg" && find . -type f); [ -n "$legacy" ] && echo "$legacy"; } | while read -r f; do
+    { (cd "$DOTFILES/$pkg" && find . -type f); if [ -n "$legacy" ]; then echo "$legacy"; fi; } | while read -r f; do
         target="$HOME/${f#./}"
         if [ -e "$target" ] && [ ! -L "$target" ]; then
             mkdir -p "$backup/$(dirname "${f#./}")"
