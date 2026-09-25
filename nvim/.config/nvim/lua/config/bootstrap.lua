@@ -4,16 +4,24 @@
 
 local tools = require("config.tools")
 local registry = require("mason-registry")
-local to_package = require("mason-lspconfig").get_mappings().lspconfig_to_package
-
 local function log(msg) io.stdout:write(msg .. "\n") end
 
--- Language servers and formatters
-local wanted = vim.list_extend(vim.tbl_map(function(s) return to_package[s] end, tools.servers), tools.formatters)
-
+-- The package registry has to be loaded before server names can be mapped to packages
 local refreshed = false
 registry.refresh(function() refreshed = true end)
 vim.wait(60000, function() return refreshed end, 200)
+
+-- Language servers (lspconfig names -> mason packages) and formatters
+local to_package = require("mason-lspconfig").get_mappings().lspconfig_to_package
+local wanted = {}
+for _, server in ipairs(tools.servers) do
+    if to_package[server] then
+        table.insert(wanted, to_package[server])
+    else
+        log("  FAILED   " .. server .. " (no mason package found)")
+    end
+end
+vim.list_extend(wanted, tools.formatters)
 
 for _, name in ipairs(wanted) do
     local pkg = registry.get_package(name)
