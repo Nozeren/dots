@@ -23,9 +23,10 @@ It's safe to re-run whenever something is added.
 
 | command | what it does |
 | ------- | ------------ |
-| `./install.sh` | everything below |
+| `./install.sh` | everything below; before linking it lists the files it would replace and asks |
 | `./install.sh packages` | install packages: `packages/arch.txt` with pacman, or `packages/Brewfile` with Homebrew (installed if missing) |
-| `./install.sh link [pkg...]` | symlink configs into `$HOME` with Stow; existing files are moved to `~/.dotfiles-backup/<timestamp>/` |
+| `./install.sh link [pkg...]` | symlink configs into `$HOME` with Stow, no prompt; existing files are moved to `~/.dotfiles-backup/<timestamp>/` (for nvim: the whole old `~/.config/nvim` and `~/.local/share/nvim`) |
+| `./install.sh nvim` | install Neovim plugins, language servers, formatters and treesitter parsers without opening Neovim (list in `nvim/.config/nvim/lua/config/tools.lua`) |
 
 Edit files in `~/dotfiles`; the symlinks mean changes apply immediately.
 When a config starts using a new tool, add it to both package lists.

@@ -4,7 +4,7 @@ vim.pack.add({ "https://github.com/stevearc/conform.nvim" })
 -- Formatters that aren't language servers; mason installs them in the background
 local registry = require("mason-registry")
 registry.refresh(function()
-    for _, name in ipairs({ "stylua", "prettier", "djlint" }) do
+    for _, name in ipairs(require("config.tools").formatters) do
         local pkg = registry.get_package(name)
         if not pkg:is_installed() then
             pkg:install()

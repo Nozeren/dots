@@ -15,25 +15,7 @@ vim.api.nvim_create_autocmd("PackChanged", {
 
 vim.pack.add({ { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" } })
 
--- Neovim already ships parsers for lua, vim, vimdoc, query, markdown and c
-local parsers = {
-    "python",
-    "html",
-    "htmldjango",
-    "css",
-    "javascript",
-    "typescript",
-    "tsx",
-    "json",
-    "yaml",
-    "toml",
-    "sql",
-    "bash",
-    "luadoc",
-    "regex",
-    "diff",
-    "gitcommit",
-}
+local parsers = require("config.tools").parsers
 
 if vim.fn.executable("tree-sitter") == 1 then
     require("nvim-treesitter").install(parsers) -- runs in the background; skips ones already built

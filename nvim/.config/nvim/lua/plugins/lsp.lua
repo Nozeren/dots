@@ -60,18 +60,8 @@ vim.lsp.config("cucumber_language_server", {
 
 require("mason").setup()
 require("mason-lspconfig").setup({
-    -- Installed on first start, then enabled automatically
-    ensure_installed = {
-        "basedpyright",
-        "ruff",
-        "pytest_language_server",
-        "lua_ls",
-        "html",
-        "djlsp",
-        "cssls",
-        "vtsls",
-        "cucumber_language_server",
-    },
+    -- Installed on first start (or by install.sh), then enabled automatically
+    ensure_installed = require("config.tools").servers,
 })
 
 -- ---------------------------------------------------------------- keymaps

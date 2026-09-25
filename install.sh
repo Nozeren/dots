@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 # Set up these dotfiles on Arch Linux or macOS.
 #
-#   ./install.sh                 everything: packages, links, default shell
+#   ./install.sh                 everything: packages, links (asks first), Neovim tools, shell
 #   ./install.sh packages        only install packages
-#   ./install.sh link [pkg...]   only link configs (all, or just the ones named)
+#   ./install.sh link [pkg...]   only link configs (all, or just the ones named); no prompt
+#   ./install.sh nvim            only install Neovim plugins, language servers and parsers
 #
-# Safe to re-run: installed packages are skipped and links are refreshed.
+# Safe to re-run: installed packages are skipped and links are refreshed. Files a link
+# would replace are moved to ~/.dotfiles-backup/<timestamp>/ first.
 set -euo pipefail
 
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -55,6 +57,27 @@ install_packages() {
 
 # ---------------------------------------------------------------- links
 
+# What linking a config would replace, one path per line (relative to $HOME):
+#  - real files (not already our symlinks) at the same place as a file in the package
+#  - old locations that would shadow the new one (tmux reads ~/.tmux.conf first)
+#  - for nvim: a whole existing ~/.config/nvim folder and its old plugin data, so the new
+#    config is linked as one clean folder instead of being mixed into the old one
+conflicts() {
+    local pkg="$1"
+    if [ "$pkg" = nvim ]; then
+        if [ -d "$HOME/.config/nvim" ] && [ ! -L "$HOME/.config/nvim" ]; then
+            echo ".config/nvim"
+            [ -d "$HOME/.local/share/nvim" ] && echo ".local/share/nvim"
+        fi
+        return
+    fi
+    local f
+    { (cd "$DOTFILES/$pkg" && find . -type f); if [ "$pkg" = tmux ]; then echo "./.tmux.conf"; fi; } | while read -r f; do
+        f="${f#./}"
+        if [ -e "$HOME/$f" ] && [ ! -L "$HOME/$f" ]; then echo "$f"; fi
+    done
+}
+
 link_configs() {
     local packages=("$@")
     [ ${#packages[@]} -gt 0 ] || packages=("${CONFIGS[@]}")
@@ -63,25 +86,46 @@ link_configs() {
     local backup="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
     for pkg in "${packages[@]}"; do
         [ -d "$DOTFILES/$pkg" ] || fail "No config named $pkg"
-
-        # Move aside real files (not our symlinks) that the package would replace,
-        # plus old locations that would shadow the new ones (tmux reads ~/.tmux.conf first)
-        local legacy=""
-        [ "$pkg" = tmux ] && legacy="./.tmux.conf"
-        { (cd "$DOTFILES/$pkg" && find . -type f); if [ -n "$legacy" ]; then echo "$legacy"; fi; } | while read -r f; do
-            local target="$HOME/${f#./}"
-            if [ -e "$target" ] && [ ! -L "$target" ]; then
-                mkdir -p "$backup/$(dirname "${f#./}")"
-                mv "$target" "$backup/${f#./}"
-                echo "    backed up ~/${f#./}"
-            fi
+        conflicts "$pkg" | while read -r f; do
+            mkdir -p "$backup/$(dirname "$f")"
+            mv "$HOME/$f" "$backup/$f"
+            echo "    backed up ~/$f"
         done
-
         info "Linking $pkg"
         stow --dir="$DOTFILES" --target="$HOME" --restow "$pkg"
     done
 
     if [ -d "$backup" ]; then info "Old files saved in $backup"; fi
+}
+
+# Show what linking would replace and ask; defaults to no
+confirm_link() {
+    local pkg list=""
+    for pkg in "${CONFIGS[@]}"; do
+        list+="$(conflicts "$pkg" | sed 's|^|    ~/|')"$'\n'
+    done
+    list="$(printf '%s' "$list" | sed '/^$/d')"
+    if [ -z "$list" ]; then return 0; fi
+
+    info "Linking the configs (${CONFIGS[*]}) would replace:"
+    printf '%s\n' "$list"
+    echo "    (they would be moved to ~/.dotfiles-backup/, not deleted)"
+    if ! { true </dev/tty; } 2>/dev/null; then
+        echo "    No terminal to ask on; skipping. Run ./install.sh link to link anyway."
+        return 1
+    fi
+    local answer
+    read -r -p "Replace them? [y/N] " answer </dev/tty
+    [[ "$answer" =~ ^[Yy]$ ]]
+}
+
+# ---------------------------------------------------------------- neovim
+
+setup_nvim() {
+    command -v nvim >/dev/null || fail "Neovim is missing; run ./install.sh packages first"
+    info "Installing Neovim plugins, language servers, formatters and parsers (can take a few minutes)"
+    # Explicit config dir, so this works before (or without) the config being linked
+    XDG_CONFIG_HOME="$DOTFILES/nvim/.config" nvim --headless -c "lua require('config.bootstrap')"
 }
 
 # ---------------------------------------------------------------- shell
@@ -102,12 +146,18 @@ cmd="${1:-all}"
 case "$cmd" in
     all)
         install_packages
-        link_configs
+        if confirm_link; then
+            link_configs
+        else
+            info "Configs not linked"
+        fi
+        setup_nvim
         set_default_shell
         info "Done ($OS). Open a new terminal to pick everything up."
         ;;
     packages) install_packages ;;
     link)     link_configs "$@" ;;
-    -h|--help|help) sed -n '2,8p' "$0" | sed 's/^# \{0,1\}//' ;;
+    nvim)     setup_nvim ;;
+    -h|--help|help) sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//' ;;
     *)        fail "Unknown command: $cmd (try ./install.sh help)" ;;
 esac
