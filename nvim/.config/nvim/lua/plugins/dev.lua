@@ -10,5 +10,5 @@ local function dev_plugin(name, setup)
 end
 
 -- Gherkin step <-> pytest-bdd step definition (<leader>ss in .feature and Python files)
--- git@github.com:Nozeren/bdd-goto-step.nvim.git (private)
-dev_plugin("bdd-goto-step.nvim", function() require("bdd_goto_step").setup() end)
+-- git@github.com:Nozeren/steplink.nvim.git (private)
+dev_plugin("steplink.nvim", function() require("steplink").setup() end)
