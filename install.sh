@@ -35,6 +35,9 @@ ensure_brew() {
 install_packages() {
     case "$OS" in
         arch)
+            # An old keyring can reject packages signed by newer developer keys
+            info "Updating the Arch keyring"
+            sudo pacman -Sy --needed --noconfirm archlinux-keyring
             info "Installing packages with pacman (packages/arch.txt)"
             # -Syu rather than -S: Arch doesn't support partial upgrades
             sed 's/#.*//' "$DOTFILES/packages/arch.txt" | xargs sudo pacman -Syu --needed --noconfirm
