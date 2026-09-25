@@ -4,6 +4,7 @@
 # dotfiles tooling
 git
 stow
+github-cli    # gh
 
 # shell and terminal
 zsh

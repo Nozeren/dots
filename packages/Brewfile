@@ -3,6 +3,7 @@
 
 # dotfiles tooling
 brew "stow"
+brew "gh"
 
 # shell and terminal
 brew "tmux"
