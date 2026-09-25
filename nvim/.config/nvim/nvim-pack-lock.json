@@ -51,6 +51,10 @@
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
+    "steplink.nvim": {
+      "rev": "fff93e8923e674beb7da2ca4bae2955b067dc9ca",
+      "src": "git@github.com:Nozeren/steplink.nvim.git"
+    },
     "tiny-inline-diagnostic.nvim": {
       "rev": "6264451f14119d63a52580e5198d6baf8518b0b2",
       "src": "https://github.com/rachartier/tiny-inline-diagnostic.nvim"

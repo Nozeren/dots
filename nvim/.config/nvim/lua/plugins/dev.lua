@@ -1,14 +1,15 @@
--- Plugins I write myself, loaded straight from their repos in ~/dev so edits apply on restart.
--- Skipped on machines where the repo isn't cloned.
+-- Plugins I write myself. Installed from GitHub with vim.pack on every machine (pinned in the
+-- lockfile like any other plugin); if I also have a clone in ~/dev, that one is loaded first so
+-- my edits apply on restart.
 
-local function dev_plugin(name, setup)
-    local path = vim.fn.expand("~/dev/" .. name)
-    if vim.uv.fs_stat(path) then
-        vim.opt.rtp:prepend(path)
-        setup()
+local function my_plugin(name, setup)
+    vim.pack.add({ "git@github.com:Nozeren/" .. name .. ".git" }) -- private repos: SSH key needed
+    local dev = vim.fn.expand("~/dev/" .. name)
+    if vim.uv.fs_stat(dev) then
+        vim.opt.rtp:prepend(dev)
     end
+    setup()
 end
 
 -- Gherkin step <-> pytest-bdd step definition (<leader>ss in .feature and Python files)
--- git@github.com:Nozeren/steplink.nvim.git (private)
-dev_plugin("steplink.nvim", function() require("steplink").setup() end)
+my_plugin("steplink.nvim", function() require("steplink").setup() end)
