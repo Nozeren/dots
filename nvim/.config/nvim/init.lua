@@ -4,6 +4,9 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- Remember Neovim's built-in keymaps so <leader>sk can list only ours
+require("config.mykeys").snapshot()
+
 -- New message/cmdline UI (experimental in 0.12)
 require("vim._core.ui2").enable({})
 
