@@ -1,7 +1,7 @@
 # Keys
 
 Everything these dotfiles add, plus the built-in keys worth remembering.
-`<leader>` is Space in Neovim; `prefix` is Ctrl+b in tmux.
+`<leader>` is Space in Neovim; `prefix` is Ctrl+b in tmux; `Super` is the Windows key in Hyprland.
 In Neovim, `<leader>sk` searches this config's keys, `<leader>sK` all of them.
 
 ## Neovim
@@ -124,3 +124,32 @@ The cursor shows the mode: a bar while typing, a block in normal mode. Typing a 
 | `Ctrl+Shift+c` / `v` | copy / paste (macOS: `Cmd+c` / `v`) |
 | `Ctrl+Shift+=` / `-` / `Backspace` | font bigger / smaller / reset (macOS: `Cmd+=` / `-` / `0`) |
 | `Ctrl+Shift+F5` | reload the config (macOS: `Cmd+Ctrl+,`) |
+
+## Hyprland (Arch)
+
+| key | does |
+| --- | --- |
+| `Super+Enter` | terminal (kitty) |
+| `Super+B` | browser (Zen) |
+| `Super+E` | file manager (Dolphin) |
+| `Super+D` | app launcher (wofi) |
+| `Super+Q` | close the window |
+| `Super+F` | fullscreen |
+| `Super+V` | float / tile the window |
+| `Super+P` | pseudotile (keep the window's own size inside its tile) |
+| `Super+h` / `Super+l` | focus the window to the **right** / **left** (swapped) |
+| `Super+j` / `Super+k` | focus the window below / above |
+| `Super+Shift+h` / `Super+Shift+l` | move the window left / right |
+| `Super+Shift+j` / `Super+Shift+k` | move the window **up** / **down** (swapped); `Super+Shift+j` also switches the split direction |
+| `Super+1`…`9`, `0` | go to workspace 1–10 |
+| `Super+Shift+1`…`9`, `0` | move the window to workspace 1–10 |
+| `Super+S` / `Super+Shift+S` | show / hide the scratchpad workspace; move the window there |
+| `Super+scroll` | next / previous workspace |
+| `Super+X` | move this workspace to the next monitor |
+| `Super` + drag / right-drag | move / resize a window with the mouse |
+| `Super+Shift+R` | reload the Hyprland config |
+| `Print` | screenshot of an area (select, annotate in swappy) |
+| `Ctrl+Alt+Delete` | power menu (power off, reboot, suspend, log out) |
+
+Media keys: volume up / down / mute, mic mute, play / pause / next / previous.
+The brightness keys call `brightnessctl`, which isn't installed yet, so they do nothing.
