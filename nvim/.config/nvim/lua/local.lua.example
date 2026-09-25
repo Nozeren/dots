@@ -1,12 +1,6 @@
 -- Copy to lua/local.lua for settings that only belong on one machine.
 -- local.lua is gitignored, so it never reaches the repo.
 
--- Example: open the VS Code Copilot agent (work laptop)
--- vim.keymap.set("n", "<leader>ca", function()
---     vim.fn.jobstart({
---         "code", "--profile", "Chat Only", "--new-window", vim.fn.getcwd(),
---         "--command", "workbench.action.closeSidebar",
---         "--command", "workbench.action.closeAllEditors",
---         "--command", "workbench.action.chat.openAgent",
---     }, { detach = true })
--- end, { desc = "Open VS Code Copilot Agent" })
+-- Example: load a plugin you're developing locally
+-- vim.opt.rtp:prepend("~/Documents/created-by-me/nvim-plugins/my-plugin.nvim")
+-- require("my-plugin").setup()
