@@ -3,7 +3,7 @@
 #
 #   ./install.sh                 everything: packages, links (asks first), Neovim tools, shell
 #   ./install.sh packages        only install packages
-#   ./install.sh link [pkg...]   only link configs (all, or just the ones named); no prompt
+#   ./install.sh link [pkg...]   only link configs: the ones named, or all of them (asks first)
 #   ./install.sh nvim            only install Neovim plugins, language servers and parsers
 #
 # Safe to re-run: installed packages are skipped and links are refreshed. Files a link
@@ -74,7 +74,10 @@ conflicts() {
     local f
     { (cd "$DOTFILES/$pkg" && find . -type f); if [ "$pkg" = tmux ]; then echo "./.tmux.conf"; fi; } | while read -r f; do
         f="${f#./}"
-        if [ -e "$HOME/$f" ] && [ ! -L "$HOME/$f" ]; then echo "$f"; fi
+        [ -e "$HOME/$f" ] || continue
+        # Already ours if it resolves into the repo (the file or a parent folder is our link)
+        [ "$(realpath "$HOME/$f")" = "$(realpath "$DOTFILES/$pkg/$f" 2>/dev/null)" ] && continue
+        echo "$f"
     done
 }
 
@@ -111,7 +114,7 @@ confirm_link() {
     printf '%s\n' "$list"
     echo "    (they would be moved to ~/.dotfiles-backup/, not deleted)"
     if ! { true </dev/tty; } 2>/dev/null; then
-        echo "    No terminal to ask on; skipping. Run ./install.sh link to link anyway."
+        echo "    No terminal to ask on; skipping. Link specific configs with ./install.sh link <name>."
         return 1
     fi
     local answer
@@ -156,7 +159,16 @@ case "$cmd" in
         info "Done ($OS). Open a new terminal to pick everything up."
         ;;
     packages) install_packages ;;
-    link)     link_configs "$@" ;;
+    link)
+        # Naming configs is deliberate; linking all of them asks first, like a full install
+        if [ $# -gt 0 ]; then
+            link_configs "$@"
+        elif confirm_link; then
+            link_configs
+        else
+            info "Configs not linked"
+        fi
+        ;;
     nvim)     setup_nvim ;;
     -h|--help|help) sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//' ;;
     *)        fail "Unknown command: $cmd (try ./install.sh help)" ;;
