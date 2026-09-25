@@ -12,7 +12,7 @@ Configs for Arch Linux and macOS, linked into place with [GNU Stow](https://www.
 ## Install
 
 ```sh
-git clone <repo-url> ~/dotfiles
+git clone git@github.com:Nozeren/dots.git ~/dotfiles
 cd ~/dotfiles
 ./install.sh            # all packages
 ./install.sh tmux nvim  # just some
