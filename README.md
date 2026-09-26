@@ -4,6 +4,20 @@ Configs for Arch Linux and macOS, linked into place with [GNU Stow](https://www.
 
 All the keys (Neovim, tmux, zsh, kitty) are in [KEYS.md](KEYS.md).
 
+## Screenshots
+
+Arch Linux with Hyprland, everything in [Everforest](https://github.com/sainnhe/everforest) dark hard.
+
+![tmux and Neovim in see-through kitty windows, waybar on top](screenshots/terminal.png)
+
+| App launcher (`Super+D`) | Clipboard history at the mouse (`Super+Shift+V`) |
+| --- | --- |
+| ![rofi app launcher](screenshots/launcher.png) | ![rofi clipboard history with an image thumbnail](screenshots/clipboard.png) |
+
+![An empty workspace: the Streetlights wallpaper and the three waybar islands](screenshots/desktop.png)
+
+## Configs
+
 | package | links to |
 | ------- | -------- |
 | `zsh`   | `~/.zshrc` |
