@@ -13,7 +13,11 @@ All the keys (Neovim, tmux, zsh, kitty) are in [KEYS.md](KEYS.md).
 | `wallpapers` | `~/.local/share/wallpapers/` (Everforest walls: streetlights on Arch, a street shop on macOS) |
 | `hypr` | `~/.config/hypr/` (Arch only: Hyprland, hyprpaper, power menu and screenshot scripts) |
 | `waybar` | `~/.config/waybar/` (Arch only) |
-| `matugen` | `~/.config/matugen/` (Arch only: generates the Hyprland/waybar colours from the wallpaper) |
+| `rofi` | `~/.config/rofi/` (Arch only: app launcher, power menu, clipboard popup) |
+| `gtk` | `~/.config/gtk-3.0/gtk.css`, `~/.config/gtk-4.0/gtk.css` (Arch only: Everforest colours for GTK apps) |
+
+Everything uses the Everforest dark hard palette: `hypr/colors.conf`, `waybar/colors.css`,
+`rofi/colors.rasi` and `gtk/` hold the same colours in each program's format.
 | `sddm/` | login screen (Arch only, not linked: `./install.sh login` copies it into place with sudo) |
 
 ## Install

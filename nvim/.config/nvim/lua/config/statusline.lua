@@ -38,7 +38,8 @@ end
 
 local function set_highlights()
     local bar = vim.api.nvim_get_hl(0, { name = "StatusLine", link = false })
-    local dark = vim.api.nvim_get_hl(0, { name = "Normal", link = false }).bg
+    -- Normal has no background when it's transparent: fall back to Everforest hard bg0
+    local dark = vim.api.nvim_get_hl(0, { name = "Normal", link = false }).bg or 0x272e33
     local set = function(name, opts) vim.api.nvim_set_hl(0, "St" .. name, opts) end
 
     -- Mode blocks: dark text on a coloured background

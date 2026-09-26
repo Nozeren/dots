@@ -1,0 +1,24 @@
+/* Everforest dark hard (github.com/sainnhe/everforest), the palette of the whole desktop */
+
+@define-color bg_dim #1e2326;
+@define-color bg0 #272e33;
+@define-color bg1 #2e383c;
+@define-color bg2 #374145;
+@define-color bg3 #414b50;
+@define-color bg4 #495156;
+@define-color bg5 #4f5b58;
+@define-color bg_red #4c3743;
+@define-color bg_green #3c4841;
+@define-color bg_blue #384b55;
+@define-color bg_yellow #45443c;
+@define-color fg #d3c6aa;
+@define-color red #e67e80;
+@define-color orange #e69875;
+@define-color yellow #dbbc7f;
+@define-color green #a7c080;
+@define-color aqua #83c092;
+@define-color blue #7fbbb3;
+@define-color purple #d699b6;
+@define-color grey0 #7a8478;
+@define-color grey1 #859289;
+@define-color grey2 #9da9a0;

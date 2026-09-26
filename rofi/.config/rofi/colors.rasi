@@ -1,0 +1,11 @@
+/* Everforest dark hard (github.com/sainnhe/everforest), the palette of the whole desktop */
+* {
+    bg:     #272e33;
+    bg-alt: #374145;
+    fg:     #d3c6aa;
+    fg-dim: #859289;
+    accent: #a7c080;
+    sel-bg: #3c4841;
+    sel-fg: #a7c080;
+    border: #495156;
+}

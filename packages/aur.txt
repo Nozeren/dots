@@ -4,3 +4,4 @@
 zen-browser-bin
 sddm-silent-theme   # login screen theme (configured in sddm/)
 pwvucontrol         # sound + mic mixer (waybar click)
+papirus-folders     # green Papirus folder icons (install.sh sets them)

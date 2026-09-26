@@ -1,5 +1,5 @@
-/* Shared look of every rofi popup (launcher, power menu, clipboard). Colours come from matugen. */
-@import "matugen/colors.rasi"
+/* Shared look of every rofi popup (launcher, power menu, clipboard). Colours: colors.rasi (Everforest). */
+@import "colors.rasi"
 
 * {
     font: "Iosevka Nerd Font 11";

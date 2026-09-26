@@ -1,0 +1,56 @@
+/* Everforest dark hard (github.com/sainnhe/everforest), the palette of the whole desktop: colours for GTK apps (adw-gtk3 theme / libadwaita) */
+
+@define-color accent_color #a7c080;
+@define-color accent_bg_color #a7c080;
+@define-color accent_fg_color #272e33;
+@define-color destructive_color #e67e80;
+@define-color destructive_bg_color #e67e80;
+@define-color destructive_fg_color #272e33;
+@define-color success_color #a7c080;
+@define-color warning_color #dbbc7f;
+@define-color error_color #e67e80;
+@define-color window_bg_color #272e33;
+@define-color window_fg_color #d3c6aa;
+@define-color view_bg_color #1e2326;
+@define-color view_fg_color #d3c6aa;
+@define-color headerbar_bg_color #2e383c;
+@define-color headerbar_fg_color #d3c6aa;
+@define-color headerbar_backdrop_color #272e33;
+@define-color sidebar_bg_color #2e383c;
+@define-color sidebar_fg_color #d3c6aa;
+@define-color sidebar_backdrop_color #272e33;
+@define-color card_bg_color #2e383c;
+@define-color card_fg_color #d3c6aa;
+@define-color dialog_bg_color #2e383c;
+@define-color dialog_fg_color #d3c6aa;
+@define-color popover_bg_color #374145;
+@define-color popover_fg_color #d3c6aa;
+
+/* libadwaita 1.6+ reads these */
+:root {
+    --accent-color: #a7c080;
+    --accent-bg-color: #a7c080;
+    --accent-fg-color: #272e33;
+    --destructive-color: #e67e80;
+    --destructive-bg-color: #e67e80;
+    --destructive-fg-color: #272e33;
+    --success-color: #a7c080;
+    --warning-color: #dbbc7f;
+    --error-color: #e67e80;
+    --window-bg-color: #272e33;
+    --window-fg-color: #d3c6aa;
+    --view-bg-color: #1e2326;
+    --view-fg-color: #d3c6aa;
+    --headerbar-bg-color: #2e383c;
+    --headerbar-fg-color: #d3c6aa;
+    --headerbar-backdrop-color: #272e33;
+    --sidebar-bg-color: #2e383c;
+    --sidebar-fg-color: #d3c6aa;
+    --sidebar-backdrop-color: #272e33;
+    --card-bg-color: #2e383c;
+    --card-fg-color: #d3c6aa;
+    --dialog-bg-color: #2e383c;
+    --dialog-fg-color: #d3c6aa;
+    --popover-bg-color: #374145;
+    --popover-fg-color: #d3c6aa;
+}

@@ -33,12 +33,11 @@ waybar
 swaync          # notifications
 rofi            # app launcher, power menu, clipboard popup
 papirus-icon-theme  # app icons in rofi
-matugen         # desktop colours from the wallpaper
 grim            # screenshots:
 slurp           #   select an area
 swappy          #   annotate
 libnotify       # notify-send
-adw-gtk-theme   # GTK3 apps in the modern GNOME look (colours from matugen)
+adw-gtk-theme   # GTK3 apps in the modern GNOME look (Everforest colours in gtk/)
 network-manager-applet  # wifi menu in the tray (nm-applet)
 blueman         # bluetooth settings (waybar right-click)
 networkmanager  # wifi (nm-applet in the tray, nm-connection-editor)

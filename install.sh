@@ -24,7 +24,7 @@ case "$(uname -s)" in
 esac
 
 CONFIGS=(zsh tmux nvim kitty wallpapers)
-[ "$OS" = arch ] && CONFIGS+=(hypr waybar matugen rofi)     # the Hyprland desktop, Arch only
+[ "$OS" = arch ] && CONFIGS+=(hypr waybar rofi gtk)     # the Hyprland desktop, Arch only
 
 # ---------------------------------------------------------------- packages
 
@@ -77,11 +77,16 @@ install_packages() {
             sudo pacman -Sy --needed --noconfirm archlinux-keyring
             info "Installing packages with pacman (packages/arch.txt)"
             # -Syu rather than -S: Arch doesn't support partial upgrades. Packages something
-            # else already provides are left out (e.g. matugen-bin from the AUR provides matugen;
-            # asking for matugen would be a conflict, which --noconfirm turns into an abort)
+            # else already provides are left out (e.g. an AUR foo-bin that provides foo;
+            # asking for foo would be a conflict, which --noconfirm turns into an abort)
             # shellcheck disable=SC2046
             sudo pacman -Syu --needed --noconfirm $(missing_packages "$DOTFILES/packages/arch.txt" pacman)
             install_aur
+            # Green folders to match Everforest; again after updates, which reset them
+            if command -v papirus-folders >/dev/null; then
+                info "Colouring the Papirus folder icons green"
+                sudo papirus-folders -C green --theme Papirus-Dark >/dev/null
+            fi
             ;;
         macos)
             ensure_brew
@@ -134,22 +139,18 @@ link_configs() {
             echo "    backed up ~/$f"
         done
         info "Linking $pkg"
-        stow --dir="$DOTFILES" --target="$HOME" --restow "$pkg"
+        # gtk: link only the files, since apps keep their own files in ~/.config/gtk-*
+        stow --dir="$DOTFILES" --target="$HOME" --restow $([ "$pkg" = gtk ] && echo --no-folding) "$pkg"
     done
 
     if [ -d "$backup" ]; then info "Old files saved in $backup"; fi
     apply_wallpaper
 }
 
-# Arch: generate the Hyprland/waybar colours from the wallpaper (the files aren't in git).
-# macOS: set the desktop picture.
+# macOS: set the desktop picture (on Arch, hyprpaper.conf names it)
 apply_wallpaper() {
     local dir="$HOME/.local/share/wallpapers"
-    if [ "$OS" = arch ] && [ -f "$dir/streetlights.png" ] && [ -f "$HOME/.config/matugen/config.toml" ] \
-        && command -v matugen >/dev/null; then
-        info "Generating desktop colours from the wallpaper (matugen)"
-        matugen image "$dir/streetlights.png" >/dev/null 2>&1 || echo "    matugen failed; run: matugen image $dir/streetlights.png"
-    elif [ "$OS" = macos ] && [ -f "$dir/japanese-street-shop.png" ]; then
+    if [ "$OS" = macos ] && [ -f "$dir/japanese-street-shop.png" ]; then
         info "Setting the desktop picture"
         osascript -e "tell application \"System Events\" to tell every desktop to set picture to \"$dir/japanese-street-shop.png\""
     fi
@@ -198,7 +199,8 @@ linked_configs() {
             kitty) marker=".config/kitty/kitty.conf" ;;
             hypr)  marker=".config/hypr/hyprland.conf" ;;
             waybar) marker=".config/waybar/config.jsonc" ;;
-            matugen) marker=".config/matugen/config.toml" ;;
+            rofi)  marker=".config/rofi/config.rasi" ;;
+            gtk)   marker=".config/gtk-3.0/gtk.css" ;;
             wallpapers) marker=".local/share/wallpapers/streetlights.png" ;;
         esac
         [ "$(realpath "$HOME/$marker" 2>/dev/null)" = "$DOTFILES/$pkg/$marker" ] && echo "$pkg"
