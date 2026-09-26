@@ -50,17 +50,23 @@ install_aur() {
     [ -f "$list" ] || return 0
     missing="$(missing_packages "$list")"
     [ -n "$missing" ] || return 0
-    if ! command -v yay >/dev/null && ! command -v paru >/dev/null; then
-        info "Installing yay (AUR helper)"
-        sudo pacman -S --needed --noconfirm base-devel git
+    # An AUR helper that doesn't start is as good as none: after a pacman update, helpers
+    # built against the old libalpm fail with "libalpm.so.N: cannot open shared object file"
+    local helper=""
+    if yay --version >/dev/null 2>&1; then helper=yay
+    elif paru --version >/dev/null 2>&1; then helper=paru
+    else
+        info "Building yay (AUR helper) from source, against the installed pacman"
+        sudo pacman -S --needed --noconfirm base-devel git go
         local tmp; tmp="$(mktemp -d)"
-        git clone --quiet https://aur.archlinux.org/yay-bin.git "$tmp/yay-bin"
-        (cd "$tmp/yay-bin" && makepkg -si --noconfirm)
+        git clone --quiet https://aur.archlinux.org/yay.git "$tmp/yay"
+        (cd "$tmp/yay" && makepkg -si --noconfirm)
         rm -rf "$tmp"
+        helper=yay
     fi
     info "Installing AUR packages (packages/aur.txt)"
     # shellcheck disable=SC2086
-    "$(command -v yay || command -v paru)" -S --needed --noconfirm $missing
+    "$helper" -S --needed --noconfirm $missing
 }
 
 install_packages() {
