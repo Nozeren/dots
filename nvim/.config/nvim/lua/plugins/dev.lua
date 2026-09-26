@@ -3,7 +3,7 @@
 -- my edits apply on restart.
 
 local function my_plugin(name, setup)
-    vim.pack.add({ "git@github.com:Nozeren/" .. name .. ".git" }) -- private repos: SSH key needed
+    vim.pack.add({ "https://github.com/Nozeren/" .. name })
     local dev = vim.fn.expand("~/dev/" .. name)
     if vim.uv.fs_stat(dev) then
         vim.opt.rtp:prepend(dev)

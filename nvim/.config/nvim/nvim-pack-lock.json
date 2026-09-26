@@ -64,8 +64,8 @@
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
     "steplink.nvim": {
-      "rev": "fff93e8923e674beb7da2ca4bae2955b067dc9ca",
-      "src": "git@github.com:Nozeren/steplink.nvim.git"
+      "rev": "2ec58dff66379cb83105f6328e89f206a0d6c1f2",
+      "src": "https://github.com/Nozeren/steplink.nvim"
     },
     "tiny-inline-diagnostic.nvim": {
       "rev": "6264451f14119d63a52580e5198d6baf8518b0b2",

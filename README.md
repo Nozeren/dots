@@ -39,7 +39,7 @@ Everything uses the Everforest dark hard palette: `hypr/colors.conf`, `waybar/co
 On a new machine (Arch Linux or macOS):
 
 ```sh
-git clone git@github.com:Nozeren/dots.git ~/dotfiles
+git clone https://github.com/Nozeren/dots.git ~/dotfiles
 ~/dotfiles/install.sh
 ```
 
