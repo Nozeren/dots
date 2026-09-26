@@ -150,10 +150,10 @@ link_configs() {
 # macOS: set the desktop picture (on Arch, hyprpaper.conf names it)
 apply_wallpaper() {
     local dir="$HOME/.local/share/wallpapers"
-    if [ "$OS" = macos ] && [ -f "$dir/japanese-street-shop.png" ]; then
-        info "Setting the desktop picture"
-        osascript -e "tell application \"System Events\" to tell every desktop to set picture to \"$dir/japanese-street-shop.png\""
-    fi
+    # Returns 0 when there's nothing to do: under set -e a failed test here would end the install
+    [ "$OS" = macos ] && [ -f "$dir/japanese-street-shop.png" ] || return 0
+    info "Setting the desktop picture"
+    osascript -e "tell application \"System Events\" to tell every desktop to set picture to \"$dir/japanese-street-shop.png\""
 }
 
 # Show what linking would replace and ask; defaults to no
