@@ -14,6 +14,7 @@ All the keys (Neovim, tmux, zsh, kitty) are in [KEYS.md](KEYS.md).
 | `hypr` | `~/.config/hypr/` (Arch only: Hyprland, hyprpaper, power menu and screenshot scripts) |
 | `waybar` | `~/.config/waybar/` (Arch only) |
 | `matugen` | `~/.config/matugen/` (Arch only: generates the Hyprland/waybar colours from the wallpaper) |
+| `sddm/` | login screen (Arch only, not linked: `./install.sh login` copies it into place with sudo) |
 
 ## Install
 
@@ -33,6 +34,7 @@ It's safe to re-run whenever something is added.
 | `./install.sh packages` | install packages: `packages/arch.txt` with pacman (plus `packages/aur.txt` with yay), or `packages/Brewfile` with Homebrew (installed if missing) |
 | `./install.sh link [pkg...]` | symlink configs into `$HOME` with Stow, no prompt; existing files are moved to `~/.dotfiles-backup/<timestamp>/` (for nvim: the whole old `~/.config/nvim` and `~/.local/share/nvim`) |
 | `./install.sh nvim` | install Neovim plugins, language servers, formatters and treesitter parsers without opening Neovim (list in `nvim/.config/nvim/lua/config/tools.lua`) |
+| `./install.sh login` | (Arch) apply the SilentSDDM login screen theme from `sddm/`, with the Streetlights wallpaper |
 | `./install.sh update` | bring a machine up to date: pull this repo, update packages, re-link the configs that are linked, update Neovim plugins/language servers/formatters/parsers, zsh and tmux plugins. Commit `nvim-pack-lock.json` afterwards if it changed |
 
 Edit files in `~/dotfiles`; the symlinks mean changes apply immediately.

@@ -6,6 +6,7 @@
 #   ./install.sh link [pkg...]   only link configs: the ones named, or all of them (asks first)
 #   ./install.sh nvim            only install Neovim plugins, language servers and parsers
 #   ./install.sh update          pull the repo, update packages, re-link, update all plugins
+#   ./install.sh login           (Arch) apply the login screen theme from sddm/ (needs sudo)
 #
 # Safe to re-run: installed packages are skipped and links are refreshed. Files a link
 # would replace are moved to ~/.dotfiles-backup/<timestamp>/ first.
@@ -217,6 +218,8 @@ update_all() {
         link_configs $linked
     fi
 
+    setup_login
+
     if command -v nvim >/dev/null; then
         info "Updating Neovim plugins, language servers, formatters and parsers"
         XDG_CONFIG_HOME="$DOTFILES/nvim/.config" nvim --headless -c "lua require('config.update')"
@@ -238,6 +241,25 @@ update_all() {
         info "Neovim plugins changed: commit nvim/.config/nvim/nvim-pack-lock.json so other machines match"
     fi
     info "Up to date. Restart Neovim and open a new shell to use the updates."
+}
+
+# ---------------------------------------------------------------- login screen (Arch)
+
+# SilentSDDM with the settings in sddm/: our config goes next to the theme's as a ".user"
+# file (SDDM applies it on top, and theme updates don't touch it), plus the wallpaper and
+# an SDDM drop-in that selects the theme.
+setup_login() {
+    [ "$OS" = arch ] || return 0
+    local theme=/usr/share/sddm/themes/silent
+    if [ ! -d "$theme" ]; then
+        echo "    SilentSDDM isn't installed yet (it's in packages/aur.txt); skipping the login screen"
+        return 0
+    fi
+    info "Applying the login screen theme"
+    sudo install -Dm644 "$DOTFILES/sddm/silent.conf" "$theme/configs/default.conf.user"
+    sudo install -Dm644 "$DOTFILES/wallpapers/.local/share/wallpapers/streetlights.png" "$theme/backgrounds/streetlights.png"
+    sudo install -Dm644 "$DOTFILES/sddm/sddm.conf" /etc/sddm.conf.d/10-silent.conf
+    echo "    active from the next login screen"
 }
 
 # ---------------------------------------------------------------- shell
@@ -264,6 +286,7 @@ case "$cmd" in
             info "Configs not linked"
         fi
         setup_nvim
+        setup_login
         set_default_shell
         info "Done ($OS). Open a new terminal to pick everything up."
         ;;
@@ -280,6 +303,7 @@ case "$cmd" in
         ;;
     nvim)     setup_nvim ;;
     update)   update_all "$@" ;;
-    -h|--help|help) sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//' ;;
+    login)    setup_login ;;
+    -h|--help|help) sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//' ;;
     *)        fail "Unknown command: $cmd (try ./install.sh help)" ;;
 esac

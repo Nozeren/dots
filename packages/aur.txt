@@ -2,3 +2,4 @@
 # One per line; anything after # is ignored.
 
 zen-browser-bin
+sddm-silent-theme   # login screen theme (configured in sddm/)
