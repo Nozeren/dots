@@ -5,19 +5,20 @@
     //"height": 30, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
     "spacing": 4, // Gaps between modules (4px)
-    "reload_style_on_chage": true,
+    "reload_style_on_change": true,
     // Choose the order of the modules
     "modules-left": [
         "hyprland/workspaces",
+        "hyprland/window",
     ],
     "modules-center": [
         "clock",
+        "mpris",
     ],
     "modules-right": [
+        "privacy",
         "group/tools",
         "battery",
-        "battery#bat2",
-        "network",
         "tray",
         "custom/notification",
         "custom/power",
@@ -33,6 +34,7 @@
             "pulseaudio",
             "pulseaudio#mic",
             "backlight",
+            "bluetooth",
         ]
     },
     "custom/expand":{
@@ -72,6 +74,40 @@
     //         "default": ""
     //     }
     // },
+    "hyprland/window": {
+        "format": "{title}",
+        "max-length": 50,
+        "separate-outputs": true,
+    },
+    "mpris": {
+        "format": "{player_icon} {artist} - {title}",
+        "format-paused": "{status_icon} <i>{artist} - {title}</i>",
+        "player-icons": {
+            "default": "󰎆",
+            "spotify": "",
+            "firefox": "󰈹",
+            "mpv": "",
+        },
+        "status-icons": {
+            "paused": "󰏤",
+        },
+        "artist-len": 20,
+        "title-len": 30,
+        "ellipsis": "…",
+        "tooltip-format": "{player}: {artist} - {title}\n{album}",
+        // left click play/pause (default), scroll to skip
+        "on-scroll-up": "playerctl next",
+        "on-scroll-down": "playerctl previous",
+    },
+    "privacy": {
+        "icon-size": 14,
+        "icon-spacing": 4,
+        "transition-duration": 250,
+        "modules": [
+            { "type": "screenshare", "tooltip": true },
+            { "type": "audio-in", "tooltip": true },
+        ],
+    },
     "clock": {
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%d-%m-%Y}",
@@ -81,11 +117,11 @@
             "weeks-pos"     : "right",
             "on-scroll"     : 1,
             "format": {
-                "months":     "<span color='#ffead3'><b>{}</b></span>",
-                "days":       "<span color='#ecc6d9'><b>{}</b></span>",
-                "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
-                "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
-                "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+                "months":     "<span color='#a7c080'><b>{}</b></span>",
+                "days":       "<span color='#d3c6aa'><b>{}</b></span>",
+                "weeks":      "<span color='#83c092'><b>W{}</b></span>",
+                "weekdays":   "<span color='#dbbc7f'><b>{}</b></span>",
+                "today":      "<span color='#e67e80'><b><u>{}</u></b></span>"
             }
         },
     },
@@ -112,20 +148,6 @@
         "format-icons": ["", "", "", "", ""],
 
     },
-    "battery#bat2": {
-        "bat": "BAT2"
-    },
-    "network": {
-        // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": " ",
-        "format-ethernet": " {cidr}",
-        "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
-        "tooltip-format-ethernet": "{ifname} 🖧 ",
-        "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}",
-        "on-click-right": "kitty -e nmtui"
-    },
     "bluetooth": {
         "format-on": "󰂯",
         "format-off": "BT-off",
@@ -151,7 +173,7 @@
             "headset": "",
             "default": [" ", " ", " "]
         },
-        "on-click": "pavucontrol -t 3"
+        "on-click": "pwvucontrol -t 4"
     },
     "pulseaudio#mic": {
         // "scroll-step": 1, // %, can be a float
@@ -168,18 +190,12 @@
             "headset": "",
             "default": [" ", " ", " "]
         },
-        "on-click": "pavucontrol -t 4"
+        "on-click": "pwvucontrol -t 3"
     },
     "custom/power": {
         "format" : "⏻ ",
         "tooltip": false,
-        "on-click": "~/.config/hypr/scripts/power-menu.sh",
-        "menu-actions": {
-            "shutdown": "shutdown",
-            "reboot": "reboot",
-            "suspend": "systemctl suspend",
-            "hibernate": "systemctl hibernate"
-        }
+        "on-click": "~/.config/hypr/scripts/power-menu.sh"
     },
     "custom/notification": {
         "tooltip": false,

@@ -35,7 +35,8 @@ grim            # screenshots:
 slurp           #   select an area
 swappy          #   annotate
 libnotify       # notify-send
-pavucontrol     # sound settings (waybar click)
+adw-gtk-theme   # GTK3 apps in the modern GNOME look (colours from matugen)
+network-manager-applet  # wifi menu in the tray (nm-applet)
 blueman         # bluetooth settings (waybar right-click)
-networkmanager  # nmtui (waybar right-click)
+networkmanager  # wifi (nm-applet in the tray, nm-connection-editor)
 dolphin         # file manager

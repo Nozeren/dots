@@ -82,7 +82,6 @@ button:hover {
 #disk,
 #temperature,
 #backlight,
-#network,
 #pulseaudio,
 #wireplumber,
 #custom-media,
@@ -92,6 +91,10 @@ button:hover {
 #custom-power,
 #custom-expand,
 #custom-notification,
+#bluetooth,
+#window,
+#mpris,
+#privacy,
 #mpd {
     padding: 0 5px;
     color: @inverse_surface;
@@ -137,25 +140,11 @@ button:hover {
 }
 
 
-#network.disconnected {
-    color: @error;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: steps(12);
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
-
 #pulseaudio {
 }
 
 #pulseaudio.muted {
     color: @error;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: steps(12);
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
 }
 
 #temperature.critical {
@@ -165,3 +154,26 @@ button:hover {
     font-size: 14px;
 }
 
+
+#window {
+    font-style: italic;
+}
+
+#mpris.paused {
+    color: @outline;
+}
+
+/* only visible while screen is shared or mic is in use */
+#privacy-item {
+    padding: 0 4px;
+    color: @error;
+}
+
+tooltip {
+    background: @surface;
+    border: 1px solid @primary;
+    border-radius: 8px;
+}
+tooltip label {
+    color: @on_surface;
+}
