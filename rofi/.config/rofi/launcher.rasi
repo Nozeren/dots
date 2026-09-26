@@ -1,0 +1,14 @@
+/* App launcher (Super+D) */
+@import "theme.rasi"
+
+window {
+    location: center;
+    anchor: center;
+    width: 560px;
+}
+entry {
+    placeholder: "Search apps…";
+}
+listview {
+    lines: 8;
+}

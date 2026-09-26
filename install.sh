@@ -24,7 +24,7 @@ case "$(uname -s)" in
 esac
 
 CONFIGS=(zsh tmux nvim kitty wallpapers)
-[ "$OS" = arch ] && CONFIGS+=(hypr waybar matugen)     # the Hyprland desktop, Arch only
+[ "$OS" = arch ] && CONFIGS+=(hypr waybar matugen rofi)     # the Hyprland desktop, Arch only
 
 # ---------------------------------------------------------------- packages
 

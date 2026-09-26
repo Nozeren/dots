@@ -1,0 +1,18 @@
+/* Power menu (Ctrl+Alt+Delete, waybar's power button): no search box, just the choices */
+@import "theme.rasi"
+
+window {
+    location: center;
+    anchor: center;
+    width: 260px;
+}
+inputbar {
+    children: [ prompt ];
+}
+listview {
+    lines: 4;
+}
+/* The entries carry their own glyphs; no room kept for app icons */
+element {
+    children: [ element-text ];
+}

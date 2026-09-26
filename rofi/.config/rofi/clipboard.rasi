@@ -1,0 +1,12 @@
+/* Clipboard history at the mouse pointer (hypr/scripts/clipboard.sh places it) */
+@import "theme.rasi"
+
+window {
+    width: 440px;
+}
+entry {
+    placeholder: "Search clipboard…";
+}
+listview {
+    lines: 8;
+}

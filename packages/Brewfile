@@ -20,3 +20,6 @@ brew "fnm"
 # fonts
 cask "font-iosevka-nerd-font"
 cask "font-jetbrains-mono-nerd-font"
+
+# desktop
+cask "maccy"        # clipboard history (Shift+Cmd+C)

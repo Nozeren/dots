@@ -19,6 +19,8 @@ fd
 fzf
 fnm           # Node versions per project (.nvmrc)
 wl-clipboard  # system clipboard for Neovim on Wayland
+cliphist      # clipboard history (Super+Shift+V)
+jq            #   (its popup script reads hyprctl's JSON)
 
 # fonts
 ttf-iosevka-nerd
@@ -29,7 +31,8 @@ hyprland
 hyprpaper
 waybar
 swaync          # notifications
-wofi            # app launcher, power menu
+rofi            # app launcher, power menu, clipboard popup
+papirus-icon-theme  # app icons in rofi
 matugen         # desktop colours from the wallpaper
 grim            # screenshots:
 slurp           #   select an area

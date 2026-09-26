@@ -132,10 +132,11 @@ The cursor shows the mode: a bar while typing, a block in normal mode. Typing a 
 | `Super+Enter` | terminal (kitty) |
 | `Super+B` | browser (Zen) |
 | `Super+E` | file manager (Dolphin) |
-| `Super+D` | app launcher (wofi) |
+| `Super+D` | app launcher (rofi) |
 | `Super+Q` | close the window |
 | `Super+F` | fullscreen |
 | `Super+V` | float / tile the window |
+| `Super+Shift+V` | clipboard history: pick an entry to copy it again (cliphist) |
 | `Super+P` | pseudotile (keep the window's own size inside its tile) |
 | `Super+h` / `Super+l` | focus the window to the **right** / **left** (swapped) |
 | `Super+j` / `Super+k` | focus the window below / above |
@@ -153,3 +154,9 @@ The cursor shows the mode: a bar while typing, a block in normal mode. Typing a 
 
 Media keys: volume up / down / mute, mic mute, play / pause / next / previous.
 The brightness keys call `brightnessctl`, which isn't installed yet, so they do nothing.
+
+## macOS
+
+| key | does |
+| --- | --- |
+| `Shift+Cmd+C` | clipboard history (Maccy); type to search, `Enter` copies |

@@ -24,3 +24,7 @@ output_path = '~/.config/gtk-3.0/gtk.css'
 [templates.gtk4]
 input_path = '~/.config/matugen/templates/gtk4.css'
 output_path = '~/.config/gtk-4.0/gtk.css'
+
+[templates.rofi]
+input_path = '~/.config/matugen/templates/rofi-colors.rasi'
+output_path = '~/.config/rofi/matugen/colors.rasi'

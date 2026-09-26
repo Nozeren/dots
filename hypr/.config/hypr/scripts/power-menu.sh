@@ -1,15 +1,12 @@
 #!/bin/bash
+# Power menu (Ctrl+Alt+Delete, waybar's power button). Esc closes it.
 
-entries=(Power-Off Reboot Suspend Log-Out Cancel)
+choice=$(printf '%s\n' "󰐥  Power off" "󰜉  Reboot" "󰤄  Suspend" "󰍃  Log out" |
+    rofi -dmenu -i -p "Power" -theme ~/.config/rofi/power.rasi) || exit 0
 
-selected=$(printf '%s\n' "${entries[@]}" | wofi --show=dmenu --prompt "Power Menu" --cache-file /dev/null --style ~/.config/hypr/scripts/power-menu.css| awk '{print tolower($1)}')
-
-# Handle the selected option
-case "$selected" in
-    "power-off") systemctl poweroff ;;
-    "reboot") systemctl reboot ;;
-    "suspend") systemctl suspend ;;
-    "log-out") hyprctl dispatch exit 0;;
-    "cancel"|"") exit 0 ;;
-    *) echo "Unknown option: $selected" ;;
+case "$choice" in
+    *"Power off") systemctl poweroff ;;
+    *Reboot) systemctl reboot ;;
+    *Suspend) systemctl suspend ;;
+    *"Log out") hyprctl dispatch exit ;;
 esac
