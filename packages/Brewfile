@@ -7,7 +7,8 @@ brew "gh"
 
 # shell and terminal
 brew "tmux"
-cask "kitty"
+# Skipped when kitty was installed by hand, which would make brew bundle fail
+cask "kitty" unless File.exist?("/Applications/kitty.app")
 
 # editor and the search tools it uses
 brew "neovim"
@@ -23,3 +24,9 @@ cask "font-jetbrains-mono-nerd-font"
 
 # desktop
 cask "maccy"        # clipboard history (Shift+Cmd+C)
+# Tiling window manager and its window borders, the macOS side of Hyprland.
+# Third-party taps: newer Homebrew may ask you to trust them first (brew trust ...)
+tap "nikitabobko/tap"
+tap "felixkratz/formulae"
+cask "nikitabobko/tap/aerospace"
+brew "felixkratz/formulae/borders"

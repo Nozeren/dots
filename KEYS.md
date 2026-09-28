@@ -1,7 +1,8 @@
 # Keys
 
 Everything these dotfiles add, plus the built-in keys worth remembering.
-`<leader>` is Space in Neovim; `prefix` is Ctrl+b in tmux; `Super` is the Windows key in Hyprland.
+`<leader>` is Space in Neovim; `prefix` is Ctrl+b in tmux; `Super` is the Windows key in Hyprland
+and `Cmd` in AeroSpace on macOS.
 In Neovim, `<leader>sk` searches this config's keys, `<leader>sK` all of them.
 
 ## Neovim
@@ -76,6 +77,9 @@ Completion menu: `Ctrl+n` / `Ctrl+p` move, `Ctrl+y` accept, `Ctrl+e` close, `Ctr
 
 ## tmux
 
+Typing `tmux` on its own attaches to the most recent session instead of adding a new one
+(with no tmux running it starts one, and the saved sessions come back). `tmux new` still makes a new session.
+
 | key | does |
 | --- | --- |
 | `Ctrl+h/j/k/l` | move between panes (and Neovim splits) |
@@ -107,6 +111,7 @@ Copy mode (`prefix` `[`, or scroll up with the mouse): move with Vim keys, `v` s
 | `Esc` | normal mode (Vim motions: `w` `b` `e` `0` `$` `f`, `ciw`, `dd`, `u`…); `i` / `a` to type again |
 | `v` then `v` | open the command in Neovim (`:wq` runs it) |
 | `Ctrl+y` or `→` | accept the grey suggestion |
+| `↑` / `↓` | previous / next command starting with what's typed (`git` `↑`: the last `git …`) |
 | `Ctrl+r` | search history (fzf) |
 | `Ctrl+t` | insert a file path (fzf) |
 | `Alt+c` | cd into a folder (fzf) |
@@ -138,10 +143,8 @@ The cursor shows the mode: a bar while typing, a block in normal mode. Typing a 
 | `Super+V` | float / tile the window |
 | `Super+Shift+V` | clipboard history: pick an entry to copy it again (cliphist) |
 | `Super+P` | pseudotile (keep the window's own size inside its tile) |
-| `Super+h` / `Super+l` | focus the window to the **right** / **left** (swapped) |
-| `Super+j` / `Super+k` | focus the window below / above |
-| `Super+Shift+h` / `Super+Shift+l` | move the window left / right |
-| `Super+Shift+j` / `Super+Shift+k` | move the window **up** / **down** (swapped); `Super+Shift+j` also switches the split direction |
+| `Super+h/j/k/l` | focus the window left / below / above / right |
+| `Super+Shift+h/j/k/l` | move the window left / down / up / right |
 | `Super+1`…`9`, `0` | go to workspace 1–10 |
 | `Super+Shift+1`…`9`, `0` | move the window to workspace 1–10 |
 | `Super+S` / `Super+Shift+S` | show / hide the scratchpad workspace; move the window there |
@@ -160,3 +163,26 @@ The brightness keys call `brightnessctl`, which isn't installed yet, so they do 
 | key | does |
 | --- | --- |
 | `Shift+Cmd+C` | clipboard history (Maccy); type to search, `Enter` copies |
+
+### AeroSpace
+
+Tiling like Hyprland, with `Cmd` in place of `Super`. These keys work in every app, so they
+replace macOS's own `Cmd+H/F/S/W/T/R/X/B` (hide, find, save, close tab, new tab, reload, cut, bold).
+
+| key | does |
+| --- | --- |
+| `Cmd+Enter` | terminal (kitty) |
+| `Cmd+B` | the default browser |
+| `Cmd+h/j/k/l` | focus the window left / below / above / right (wraps around) |
+| `Cmd+Shift+h/j/k/l` | move the window left / down / up / right |
+| `Cmd+1`…`9`, `0` | go to workspace 1–10 |
+| `Cmd+Shift+1`…`9`, `0` | move the window to workspace 1–10 |
+| `Cmd+F` | fullscreen |
+| `Cmd+Shift+Space` | float / tile the window |
+| `Cmd+T` | tiles, switching between side by side and stacked |
+| `Cmd+S` / `Cmd+W` | accordion, stacked / side by side |
+| `Cmd+R` | resize mode: `h`/`l` narrower / wider, `j`/`k` taller / shorter, `Enter` or `Esc` to finish |
+| `Cmd+X` | move this workspace to the next monitor |
+| `Cmd+Shift+C` | reload the AeroSpace config |
+
+kitty windows open on workspace 1. With an external screen, workspaces 1–2 are on it and 3–5 on the laptop.

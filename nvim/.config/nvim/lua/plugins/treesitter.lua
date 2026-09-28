@@ -15,10 +15,12 @@ vim.api.nvim_create_autocmd("PackChanged", {
 
 vim.pack.add({ { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" } })
 
+local M = {}
 local parsers = require("config.tools").parsers
 
 if vim.fn.executable("tree-sitter") == 1 then
-    require("nvim-treesitter").install(parsers) -- runs in the background; skips ones already built
+    -- Runs in the background; skips ones already built. Kept so config.bootstrap can wait for it
+    M.install = require("nvim-treesitter").install(parsers)
 else
     vim.notify("treesitter: install tree-sitter-cli to build parsers (./install.sh packages)", vim.log.levels.WARN)
 end
@@ -33,3 +35,5 @@ vim.api.nvim_create_autocmd("FileType", {
         end
     end,
 })
+
+return M

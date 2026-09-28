@@ -25,6 +25,7 @@ esac
 
 CONFIGS=(zsh tmux nvim kitty wallpapers)
 [ "$OS" = arch ] && CONFIGS+=(hypr waybar rofi gtk)     # the Hyprland desktop, Arch only
+[ "$OS" = macos ] && CONFIGS+=(aerospace)               # its macOS counterpart
 
 # ---------------------------------------------------------------- packages
 
@@ -103,7 +104,8 @@ install_packages() {
 
 # What linking a config would replace, one path per line (relative to $HOME):
 #  - real files (not already our symlinks) at the same place as a file in the package
-#  - old locations that would shadow the new one (tmux reads ~/.tmux.conf first)
+#  - old locations that would shadow the new one (tmux reads ~/.tmux.conf first;
+#    AeroSpace refuses to start when ~/.aerospace.toml exists as well)
 #  - for nvim: a whole existing ~/.config/nvim folder and its old plugin data, so the new
 #    config is linked as one clean folder instead of being mixed into the old one
 conflicts() {
@@ -116,7 +118,13 @@ conflicts() {
         return
     fi
     local f
-    { (cd "$DOTFILES/$pkg" && find . -type f); if [ "$pkg" = tmux ]; then echo "./.tmux.conf"; fi; } | while read -r f; do
+    {
+        (cd "$DOTFILES/$pkg" && find . -type f)
+        case "$pkg" in
+            tmux)      echo "./.tmux.conf" ;;
+            aerospace) echo "./.aerospace.toml" ;;
+        esac
+    } | while read -r f; do
         f="${f#./}"
         [ -e "$HOME/$f" ] || continue
         # Already ours if it resolves into the repo (the file or a parent folder is our link)
@@ -144,6 +152,11 @@ link_configs() {
     done
 
     if [ -d "$backup" ]; then info "Old files saved in $backup"; fi
+    # A running tmux server keeps its old config until it's told to reload
+    if [[ " ${packages[*]} " == *" tmux "* ]] && tmux has-session 2>/dev/null; then
+        info "Reloading the running tmux"
+        tmux source-file "$HOME/.config/tmux/tmux.conf"
+    fi
     apply_wallpaper
 }
 
@@ -201,6 +214,7 @@ linked_configs() {
             waybar) marker=".config/waybar/config.jsonc" ;;
             rofi)  marker=".config/rofi/config.rasi" ;;
             gtk)   marker=".config/gtk-3.0/gtk.css" ;;
+            aerospace) marker=".config/aerospace/aerospace.toml" ;;
             wallpapers) marker=".local/share/wallpapers/streetlights.png" ;;
         esac
         [ "$(realpath "$HOME/$marker" 2>/dev/null)" = "$DOTFILES/$pkg/$marker" ] && echo "$pkg"

@@ -13,6 +13,13 @@ path=("$HOME/.local/bin" $path)
 export EDITOR=nvim VISUAL=nvim
 export MANPAGER="nvim +Man!"
 
+# macOS: Neovim's sockets go under $TMPDIR by default, which is too long for the ~103-character
+# socket path limit when the username is long (fzf-lua then fails to start its server)
+if [[ $OSTYPE == darwin* ]]; then
+    export XDG_RUNTIME_DIR="$HOME/.cache/run"
+    [[ -d $XDG_RUNTIME_DIR ]] || mkdir -p -m 700 "$XDG_RUNTIME_DIR"
+fi
+
 # ---------------------------------------------------------------- history and options
 
 HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
@@ -64,15 +71,37 @@ zsh-plugins-update() {
 # zsh-vi-mode: Esc for normal mode (w, b, ciw, dd, ...), vv opens the command in Neovim.
 # It resets key bindings when it starts, so other bindings go in zvm_after_init.
 source "$ZSH_PLUGINS/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
+autoload -U up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
 zvm_after_init() {
     source <(fzf --zsh)             # Ctrl+r history, Ctrl+t files, Alt+c folders
     bindkey '^y' autosuggest-accept # Ctrl+y accepts the suggestion, like completion in Neovim
+    # Up/Down only go through commands starting with what's typed (nvim + Up: the last nvim ...)
+    local keymap
+    for keymap in viins vicmd; do
+        bindkey -M $keymap '^[[A' up-line-or-beginning-search
+        bindkey -M $keymap '^[[B' down-line-or-beginning-search
+        bindkey -M $keymap '^[OA' up-line-or-beginning-search   # same keys in application mode
+        bindkey -M $keymap '^[OB' down-line-or-beginning-search
+    done
 }
 
 source "$ZSH_PLUGINS/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$ZSH_PLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 # ---------------------------------------------------------------- tools
+
+# Plain `tmux` attaches to the most recent session instead of adding a new one each time.
+# With no server running it starts one, and tmux-continuum restores the saved sessions
+# (tmux-resurrect then removes the startup session "0"). Any arguments work as usual.
+tmux() {
+    if (( $# == 0 )); then
+        command tmux attach 2>/dev/null || command tmux new-session
+    else
+        command tmux "$@"
+    fi
+}
 
 # Node versions: switches automatically when a folder has .nvmrc / .node-version
 command -v fnm >/dev/null && eval "$(fnm env --use-on-cd --shell zsh)"
@@ -105,3 +134,7 @@ precmd() {
     print -P "\n%F{#a7c080}%~%f${vcs_info_msg_0_}${VIRTUAL_ENV:+ %F{#859289\}(${VIRTUAL_ENV:t})%f}"
 }
 PROMPT='%(?.%F{#a7c080}.%F{#e67e80})❯%f '
+
+# Machine-specific settings and secrets, kept out of this repo: every file in ~/.config/zsh/local
+for f in ~/.config/zsh/local/*.zsh(N); do source "$f"; done
+unset f

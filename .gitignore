@@ -3,3 +3,6 @@
 # machine-specific Neovim settings
 nvim/.config/nvim/lua/local.lua
 
+# machine-specific tmux settings
+tmux/.config/tmux/local/
+

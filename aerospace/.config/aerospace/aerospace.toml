@@ -1,0 +1,115 @@
+# ~/.config/aerospace/aerospace.toml
+#
+# AeroSpace: i3-like tiling on macOS, set up to look and behave like Hyprland on Arch
+# (hypr/.config/hypr). cmd plays the part of Super. All the keys are in KEYS.md.
+# Only generic app rules live here; AeroSpace can't include a machine-local file.
+
+start-at-login = true
+
+after-startup-command = [
+    # Window borders (JankyBorders), Everforest like Hyprland's style.conf:
+    # green→aqua active, bg3 inactive, 2px (colours from hypr/colors.conf)
+    'exec-and-forget borders active_color="gradient(top_left=0xffa7c080,bottom_right=0xff83c092)" inactive_color=0xff414b50 width=2.0',
+]
+
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+accordion-padding = 0
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+
+# Mouse follows focus to the other monitor
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+# Apps hidden with Cmd+H come back when they're tiled
+automatically-unhide-macos-hidden-apps = true
+
+# Brew's folders, so exec-and-forget finds `borders` (Apple Silicon and Intel)
+[exec]
+    inherit-env-vars = true
+[exec.env-vars]
+    PATH = '/opt/homebrew/bin:/usr/local/bin:${PATH}'
+
+[key-mapping]
+    preset = 'qwerty'
+
+# Same as Hyprland: gaps_in = 5 on each side (10 between windows), gaps_out = 10
+[gaps]
+    inner.horizontal = 10
+    inner.vertical = 10
+    outer.left = 10
+    outer.bottom = 10
+    outer.top = 10
+    outer.right = 10
+
+[mode.main.binding]
+    cmd-enter = 'exec-and-forget open -a kitty'
+    # The default browser (whatever macOS opens https links with)
+    cmd-b = '''exec-and-forget open -a "$(osascript -l JavaScript -e 'ObjC.import("AppKit"); $.NSWorkspace.sharedWorkspace.URLForApplicationToOpenURL($.NSURL.URLWithString("https://example.com")).path.js')"'''
+
+    cmd-h = 'focus --boundaries-action wrap-around-the-workspace left'
+    cmd-j = 'focus --boundaries-action wrap-around-the-workspace down'
+    cmd-k = 'focus --boundaries-action wrap-around-the-workspace up'
+    cmd-l = 'focus --boundaries-action wrap-around-the-workspace right'
+
+    cmd-shift-h = 'move left'
+    cmd-shift-j = 'move down'
+    cmd-shift-k = 'move up'
+    cmd-shift-l = 'move right'
+
+    cmd-f = 'fullscreen'
+    cmd-shift-space = 'layout floating tiling'
+    cmd-s = 'layout v_accordion'
+    cmd-w = 'layout h_accordion'
+    cmd-t = 'layout tiles horizontal vertical'
+
+    cmd-1 = 'workspace 1'
+    cmd-2 = 'workspace 2'
+    cmd-3 = 'workspace 3'
+    cmd-4 = 'workspace 4'
+    cmd-5 = 'workspace 5'
+    cmd-6 = 'workspace 6'
+    cmd-7 = 'workspace 7'
+    cmd-8 = 'workspace 8'
+    cmd-9 = 'workspace 9'
+    cmd-0 = 'workspace 10'
+
+    cmd-shift-1 = 'move-node-to-workspace 1'
+    cmd-shift-2 = 'move-node-to-workspace 2'
+    cmd-shift-3 = 'move-node-to-workspace 3'
+    cmd-shift-4 = 'move-node-to-workspace 4'
+    cmd-shift-5 = 'move-node-to-workspace 5'
+    cmd-shift-6 = 'move-node-to-workspace 6'
+    cmd-shift-7 = 'move-node-to-workspace 7'
+    cmd-shift-8 = 'move-node-to-workspace 8'
+    cmd-shift-9 = 'move-node-to-workspace 9'
+    cmd-shift-0 = 'move-node-to-workspace 10'
+
+    cmd-x = 'move-workspace-to-monitor --wrap-around next'
+    cmd-shift-c = 'reload-config'
+    cmd-r = 'mode resize'
+
+# cmd-r, then h/j/k/l resize; Enter or Esc to finish
+[mode.resize.binding]
+    h = 'resize width -50'
+    j = 'resize height +50'
+    k = 'resize height -50'
+    l = 'resize width +50'
+    enter = 'mode main'
+    esc = 'mode main'
+
+# Workspaces: 1 terminal and editor, 2 browser, 3–4 chat and mail, 5 other tools.
+# With an external screen 1 and 2 go there and the rest stay on the laptop; without one,
+# everything is on the laptop.
+[workspace-to-monitor-force-assignment]
+    1 = ['secondary', 'main']
+    2 = ['secondary', 'main']
+    3 = ['main', 'secondary']
+    4 = ['main', 'secondary']
+    5 = 'main'
+
+# Only the first matching rule runs (unless check-further-callbacks = true),
+# so put specific rules before general ones for the same app
+[[on-window-detected]]
+    if.app-id = 'net.kovidgoyal.kitty'
+    run = 'move-node-to-workspace 1'
